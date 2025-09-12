@@ -68,7 +68,7 @@ namespace Application.Services
 
         public async Task<FleetDto> CreateFleetAsync(FleetDto dto)
         {
-            var fleet = new Fleet(); // no futuro pode usar dados do dto
+            var fleet = new Fleet();
             await _fleetRepository.AddAsync(fleet);
             await _fleetRepository.SaveChangesAsync();
             return FleetDto.FromDomain(fleet);
@@ -80,29 +80,22 @@ namespace Application.Services
             return fleet == null ? null : FleetDto.FromDomain(fleet);
         }
 
-        public Task<IEnumerable<FleetDto>> GetAllFleetsAsync()
+        public async Task<IEnumerable<FleetDto>> GetAllFleetsAsync()
         {
-            throw new NotImplementedException();
+            var fleets = await _fleetRepository.GetAllFleetsAsync(); 
+            return fleets.Select(FleetDto.FromDomain);
         }
 
-        public Task UpdateFleetAsync(Guid fleetId, FleetDto dto)
+
+        public async Task DeleteFleetAsync(Guid fleetId)
         {
-            throw new NotImplementedException();
+            var fleet = await _fleetRepository.GetByIdAsync(fleetId)
+                ?? throw new InvalidOperationException("Fleet not found");
+
+            await _fleetRepository.DeleteAsync(fleet);
+            await _fleetRepository.SaveChangesAsync();
         }
 
-        public Task DeleteFleetAsync(Guid fleetId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task DeleteVehicleAsync(Guid fleetId, Guid vehicleId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteDriverAsync(Guid fleetId, Guid driverId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

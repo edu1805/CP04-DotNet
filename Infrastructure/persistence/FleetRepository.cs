@@ -35,5 +35,22 @@ namespace Infrastructure.persistence
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Fleet>> GetAllFleetsAsync()
+        {
+            return await _context.Fleets
+                .Include(f => f.Vehicles)
+                .Include(f => f.Drivers)
+                .ToListAsync();
+        }
+
+        public async Task<Fleet?> DeleteAsync(Fleet fleet)
+        {
+            if (fleet == null) return null;
+
+            _context.Fleets.Remove(fleet);
+            await _context.SaveChangesAsync();
+            return fleet;
+        }
     }
 }

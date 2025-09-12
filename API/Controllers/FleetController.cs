@@ -42,20 +42,6 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetFleetById), new { id = fleet.Id }, fleet);
         }
 
-        // PUT: api/fleet/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFleet(Guid id, [FromBody] FleetDto dto)
-        {
-            try
-            {
-                await _fleetService.UpdateFleetAsync(id, dto);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
         // DELETE: api/fleet/{id}
         [HttpDelete("{id}")]
@@ -87,20 +73,6 @@ namespace API.Controllers
             }
         }
 
-        // DELETE: api/fleet/{fleetId}/vehicles/{vehicleId}
-        [HttpDelete("{fleetId}/vehicles/{vehicleId}")]
-        public async Task<IActionResult> DeleteVehicle(Guid fleetId, Guid vehicleId)
-        {
-            try
-            {
-                await _fleetService.DeleteVehicleAsync(fleetId, vehicleId);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
         // POST: api/fleet/{fleetId}/drivers
         [HttpPost("{fleetId}/drivers")]
@@ -117,19 +89,5 @@ namespace API.Controllers
             }
         }
 
-        // DELETE: api/fleet/{fleetId}/drivers/{driverId}
-        [HttpDelete("{fleetId}/drivers/{driverId}")]
-        public async Task<IActionResult> DeleteDriver(Guid fleetId, Guid driverId)
-        {
-            try
-            {
-                await _fleetService.DeleteDriverAsync(fleetId, driverId);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
     }
 }

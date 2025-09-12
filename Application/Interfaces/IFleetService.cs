@@ -12,9 +12,6 @@ public interface IFleetService
     Task<FleetDto?> GetFleetAsync(Guid fleetId);
     Task<IEnumerable<FleetDto>> GetAllFleetsAsync();
 
-    Task UpdateFleetAsync(Guid fleetId, FleetDto dto);
     Task DeleteFleetAsync(Guid fleetId);
 
-    Task DeleteVehicleAsync(Guid fleetId, Guid vehicleId);
-    Task DeleteDriverAsync(Guid fleetId, Guid driverId);
 }

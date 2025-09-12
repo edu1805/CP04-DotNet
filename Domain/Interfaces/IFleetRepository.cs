@@ -11,6 +11,8 @@ namespace Domain.Interfaces
     {
         Task<Fleet?> GetByIdAsync(Guid id);
         Task AddAsync(Fleet fleet);
+        Task<IEnumerable<Fleet>> GetAllFleetsAsync();
         Task SaveChangesAsync();
+        Task<Fleet?> DeleteAsync(Fleet fleet);
     }
 }
