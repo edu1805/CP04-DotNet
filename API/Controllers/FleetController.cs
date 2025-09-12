@@ -6,6 +6,8 @@ using Application.DTOs;
 
 namespace API.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class FleetController : ControllerBase
     {
         private readonly IFleetService _fleetService;

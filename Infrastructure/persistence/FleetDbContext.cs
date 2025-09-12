@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.persistence
 {
-    class FleetDbContext : DbContext
+    public class FleetDbContext : DbContext
     {
         public FleetDbContext(DbContextOptions<FleetDbContext> options)
             : base(options) { }
@@ -35,16 +35,21 @@ namespace Infrastructure.persistence
             modelBuilder.Entity<Fleet>(entity =>
             {
                 entity.HasKey(f => f.Id);
+                entity.Property(f => f.Id).HasColumnType("RAW(16)");
             });
 
             modelBuilder.Entity<Vehicle>(entity =>
             {
                 entity.HasKey(v => v.Id);
+                entity.Property(v => v.Id).HasColumnType("RAW(16)");
+                entity.Property(v => v.IsActive).HasConversion<int>(); // bool -> 0/1
             });
 
             modelBuilder.Entity<Driver>(entity =>
             {
                 entity.HasKey(d => d.Id);
+                entity.Property(d => d.Id).HasColumnType("RAW(16)");
+                entity.Property(d => d.IsAvailable).HasConversion<int>(); // bool -> 0/1
             });
 
             // Relacionamentos do agregado Fleet
