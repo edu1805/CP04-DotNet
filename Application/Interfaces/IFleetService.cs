@@ -1,18 +1,20 @@
 ﻿using Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Application.Interfaces;
+
+public interface IFleetService
 {
-    public interface IFleetService
-    {
-        Task<FleetDto> CreateFleetAsync();
-        Task AddDriverAsync(Guid fleetId, CreateDriverDto dto);
-        Task AddVehicleAsync(Guid fleetId, CreateVehicleDto dto);
-        Task AssignDriverToVehicleAsync(Guid fleetId, Guid driverId, Guid vehicleId);
-        Task<FleetDto?> GetFleetByIdAsync(Guid fleetId);
-    }
+    Task<FleetDto> CreateFleetAsync(FleetDto dto);
+    Task AddDriverAsync(Guid fleetId, CreateDriverDto dto);
+    Task AddVehicleAsync(Guid fleetId, CreateVehicleDto dto);
+    Task AssignDriverToVehicleAsync(Guid fleetId, Guid driverId, Guid vehicleId);
+
+    Task<FleetDto?> GetFleetAsync(Guid fleetId);
+    Task<IEnumerable<FleetDto>> GetAllFleetsAsync();
+
+    Task UpdateFleetAsync(Guid fleetId, FleetDto dto);
+    Task DeleteFleetAsync(Guid fleetId);
+
+    Task DeleteVehicleAsync(Guid fleetId, Guid vehicleId);
+    Task DeleteDriverAsync(Guid fleetId, Guid driverId);
 }

@@ -65,5 +65,44 @@ namespace Application.Services
             var fleet = await _fleetRepository.GetByIdAsync(fleetId);
             return fleet == null ? null : FleetDto.FromDomain(fleet);
         }
+
+        public async Task<FleetDto> CreateFleetAsync(FleetDto dto)
+        {
+            var fleet = new Fleet(); // no futuro pode usar dados do dto
+            await _fleetRepository.AddAsync(fleet);
+            await _fleetRepository.SaveChangesAsync();
+            return FleetDto.FromDomain(fleet);
+        }
+
+        public async Task<FleetDto?> GetFleetAsync(Guid fleetId)
+        {
+            var fleet = await _fleetRepository.GetByIdAsync(fleetId);
+            return fleet == null ? null : FleetDto.FromDomain(fleet);
+        }
+
+        public Task<IEnumerable<FleetDto>> GetAllFleetsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateFleetAsync(Guid fleetId, FleetDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteFleetAsync(Guid fleetId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteVehicleAsync(Guid fleetId, Guid vehicleId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteDriverAsync(Guid fleetId, Guid driverId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
