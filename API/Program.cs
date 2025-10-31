@@ -1,10 +1,14 @@
 using Application.Interfaces;
 using Application.Services;
+using Application.Configs;
 using Infrastructure;
-
+using API.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configs = builder.Configuration.Get<Settings>();
+builder.Services.AddSingleton(configs);
 
 // ------------------------------
 // Configuração de serviços
@@ -19,9 +23,14 @@ builder.Services.AddScoped<IFleetService, FleetService>();
 // Adicionar controllers
 builder.Services.AddControllers();
 
+// ------------------------------
+// Versionamento da API
+// ------------------------------
+builder.Services.AddVersioning();
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger(configs);
 
 // ------------------------------
 // Build do app
@@ -36,7 +45,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(ui =>
+    {
+        ui.SwaggerEndpoint("/swagger/v1/swagger.json",  "WEB.API v1");
+        ui.SwaggerEndpoint("/swagger/v2/swagger.json",  "WEB.API v2");
+    });
 }
 
 app.UseHttpsRedirection();

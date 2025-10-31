@@ -3,11 +3,13 @@ using Application.Interfaces;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Application.DTOs;
+using Asp.Versioning;
 
 namespace API.Controllers
 {
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
     public class FleetController : ControllerBase
     {
         private readonly IFleetService _fleetService;
