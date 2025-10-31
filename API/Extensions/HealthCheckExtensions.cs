@@ -5,10 +5,11 @@ public static class HealthCheckExtensions
     public static IServiceCollection AddHealthCheckConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
-            .AddOracle(
-                configuration.GetConnectionString("OracleConnection")!,
-                name: "oracle-database",
-                tags: new[] { "database" }
+            .AddMongoDb(
+                mongodbConnectionString: configuration["MongoDB:ConnectionString"]!,
+                name: "mongodb-database",
+                timeout: TimeSpan.FromSeconds(3),
+                tags: new[] { "database", "mongodb" }
             );
 
         return services;

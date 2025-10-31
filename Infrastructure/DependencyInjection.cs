@@ -1,13 +1,8 @@
 ﻿using Domain.Interfaces;
 using Infrastructure.persistence;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Infrastructure.Persistence;
 
 namespace Infrastructure
 {
@@ -15,11 +10,13 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            // DbContext Oracle
-            services.AddDbContext<FleetDbContext>(options =>
-                options.UseOracle(configuration.GetConnectionString("OracleConnection")));
+            // Configurações do MongoDB
+            services.Configure<MongoSettings>(configuration.GetSection("MongoDB"));
+            
+            // DbContext do MongoDB (Singleton porque mantém a conexão)
+            services.AddSingleton<FleetDbContext>();
 
-            // Repositórios
+            // Repositórios (Scoped para seguir o padrão de repositórios)
             services.AddScoped<IFleetRepository, FleetRepository>();
 
             return services;

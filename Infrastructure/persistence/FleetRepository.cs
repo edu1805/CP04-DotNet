@@ -1,56 +1,51 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.persistence;
 
-namespace Infrastructure.persistence
+namespace Infrastructure.Persistence
 {
-    class FleetRepository : IFleetRepository
+    public class FleetRepository : IFleetRepository
     {
-        private readonly FleetDbContext _context;
+        private readonly IMongoCollection<Fleet> _fleets;
 
         public FleetRepository(FleetDbContext context)
         {
-            _context = context;
+            _fleets = context.GetCollection<Fleet>("Fleets");
         }
 
         public async Task<Fleet?> GetByIdAsync(Guid id)
         {
-            return await _context.Fleets
-                .Include(f => f.Vehicles)
-                .Include(f => f.Drivers)
-                .FirstOrDefaultAsync(f => f.Id == id);
+            var filter = Builders<Fleet>.Filter.Eq(f => f.Id, id);
+            return await _fleets.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(Fleet fleet)
         {
-            await _context.Fleets.AddAsync(fleet);
-        }
-
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
+            await _fleets.InsertOneAsync(fleet);
         }
 
         public async Task<IEnumerable<Fleet>> GetAllFleetsAsync()
         {
-            return await _context.Fleets
-                .Include(f => f.Vehicles)
-                .Include(f => f.Drivers)
-                .ToListAsync();
+            return await _fleets.Find(_ => true).ToListAsync();
         }
 
         public async Task<Fleet?> DeleteAsync(Fleet fleet)
         {
             if (fleet == null) return null;
 
-            _context.Fleets.Remove(fleet);
-            await _context.SaveChangesAsync();
+            var filter = Builders<Fleet>.Filter.Eq(f => f.Id, fleet.Id);
+            await _fleets.DeleteOneAsync(filter);
             return fleet;
+        }
+
+        
+        public Task SaveChangesAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }
